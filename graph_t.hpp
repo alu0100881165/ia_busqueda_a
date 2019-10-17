@@ -9,10 +9,14 @@ class grafo_t
     int size_;                    //número de nodos
 
   public:
-    grafo_t(void);
-    grafo_t(int size);
+    grafo_t();
+    grafo_t(vector<vector<int>> vector_formateado, int size);
 
     void set_size(int size);
     int get_size(void);
-    
-}
+
+    void set_grafo_vect_size(void);
+    void insert_grafo_vect_pos(vector<Pair> to_insert, int pos);
+
+    ostream& write(ostream& os);
+};

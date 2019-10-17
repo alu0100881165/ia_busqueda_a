@@ -1,13 +1,41 @@
-//#include "graph.hpp"
+#include "graph_t.hpp"
 #include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <locale>
-#include <limits>
 #include <algorithm>
 
 using namespace std;
+
+//método que recibe el vector que se lee desde fichero, y lo formatea para la contrucción de nodos.
+void formatear_vector(vector<int> vector_formatear, vector<vector<int>> &vector_return, int size)
+{
+  int cont = 0, int_aux = 0, int_dummy = 0;
+  // vector<vector<int>> vector_return(size, vector<int>(size - 1));
+
+  for(int i = 0; i < (vector_formatear.size() + 1); i++)
+  {
+    if(cont == 4)
+    {
+      cont = 0;
+      int_dummy = 0;
+      int_aux++;
+    }
+    while(int_dummy < int_aux)
+    {
+      vector_return[int_aux][cont] = vector_return[int_dummy][(int_aux - 1)];
+      int_dummy++;
+      cont++;
+    }
+    if(i < vector_formatear.size())
+    {
+      vector_return[int_aux][cont] = vector_formatear[i];
+      // cout << "Pos i: " << int_aux << "    Pos j: " << cont << "\t Valor a introducir: " << vector_formatear[i] << "       Valor introducido: " << vector_return[int_aux][cont] << endl;
+      cont++;
+    }
+  }
+}
+
+
+
 
 int main (int argc, char** argv)      //pongo char** para que almacene los nombres correctamente
 {
@@ -20,7 +48,7 @@ int main (int argc, char** argv)      //pongo char** para que almacene los nombr
   if(graph_file.is_open())        //Comprobar que el fichero este abierto
   {
     graph_file >> tam;
-    cout << "Tamaño: " << tam << endl;
+    // cout << "Tamaño: " << tam << endl;
 
     vector<vector<int>> nodos_fichero(tam, vector<int>(tam - 1));
 
@@ -74,31 +102,34 @@ int main (int argc, char** argv)      //pongo char** para que almacene los nombr
     //   cout << "Valores del vector: " << vector_int_aux[i] << endl;
     // }
 
-    cont = 0;
-    int_aux = 0;
-    int_dummy = 0;
+    // cont = 0;
+    // int_aux = 0;
+    // int_dummy = 0;
+    //
+    // for(int i = 0; i < (vector_int_aux.size() + 1); i++)
+    // {
+    //   if(cont == 4)
+    //   {
+    //     cont = 0;
+    //     int_dummy = 0;
+    //     int_aux++;
+    //   }
+    //   while(int_dummy < int_aux)
+    //   {
+    //     nodos_fichero[int_aux][cont] = nodos_fichero[int_dummy][(int_aux - 1)];
+    //     int_dummy++;
+    //     cont++;
+    //   }
+    //   if(i < vector_int_aux.size())
+    //   {
+    //     nodos_fichero[int_aux][cont] = vector_int_aux[i];
+    //   // cout << "Pos i: " << int_aux << "    Pos j: " << cont << "\t Valor a introducir: " << vector_int_aux[i] << "       Valor introducido: " << nodos_fichero[int_aux][cont] << endl;
+    //     cont++;
+    //   }
+    // }
 
-    for(int i = 0; i < (vector_int_aux.size() + 1); i++)
-    {
-      if(cont == 4)
-      {
-        cont = 0;
-        int_dummy = 0;
-        int_aux++;
-      }
-      while(int_dummy < int_aux)
-      {
-        nodos_fichero[int_aux][cont] = nodos_fichero[int_dummy][(int_aux - 1)];
-        int_dummy++;
-        cont++;
-      }
-      if(i < vector_int_aux.size())
-      {
-        nodos_fichero[int_aux][cont] = vector_int_aux[i];
-      // cout << "Pos i: " << int_aux << "    Pos j: " << cont << "\t Valor a introducir: " << vector_int_aux[i] << "       Valor introducido: " << nodos_fichero[int_aux][cont] << endl;
-        cont++;
-      }
-    }
+    // nodos_fichero = formatear_vector(vector_int_aux, tam);
+    formatear_vector(vector_int_aux, nodos_fichero, tam);
 
     cout << endl << endl << endl << endl;
     cout << "Contenido de nodos_fichero: " << endl;
@@ -111,7 +142,12 @@ int main (int argc, char** argv)      //pongo char** para que almacene los nombr
       cout << endl;
     }
 
+    cout << endl << endl << endl << endl;
 
+    grafo_t Grafo_busqueda(nodos_fichero, tam);
+
+    cout << "Prueba de write." << endl;
+    Grafo_busqueda.write(cout);
 
   }
   else
